@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createContext, useContext } from "react"
 import data from '../data/questions.json'
 export const QuizContext = createContext();
@@ -6,20 +6,37 @@ export const QuizContext = createContext();
 export const QuizProvider = ( {children}) => {
     const [ result, setResult ] = useState({ nickname: "" , score : 0,  total: 0}); 
     const [ qdata, qSetData ] = useState(data); 
-    const [ answerCounts, SetanswerCounts ] = useState(0);     
-    const [rankingList, setRankingList] = useState(() => {
-    const saved = localStorage.getItem("ranking");
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [ answerCounts, SetanswerCounts ] = useState(0);       
+    const [rankingList, setRankingList] = useState([]);
 
-    const addRanking = (nickname, score) => {
-        setRankingList(prev => {
-            const exists = prev.some(r => r.nickname === nickname && r.score === score);
-            if (exists) return prev;
-            const updated = [...prev, { nickname, score }];
-            localStorage.setItem("ranking", JSON.stringify(updated));
-            return updated;
-        });
+    useEffect(()=>{
+         fetch('http://localhost:3000/newRanking')
+            .then((res)=> res.json())
+            .then((data)=> setRankingList(data))
+            .catch((err) => console.error("랭킹 불러오기 실패",err));
+    },[])
+
+    const addRanking = async (nickname, score) => {
+         if (rankingList.some(r => r.nickname === nickname)) return;
+
+        try {
+            const res = await fetch('http://localhost:3000/newRanking',{
+                method : "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ nickname, score }),           
+            })
+            const newRank = await res.json();
+            setRankingList((prev) => 
+                [...prev, newRank]
+                .sort((a, b) => b.score - a.score) // 점수 내림차순 정렬
+                .slice(0, 10)
+            );
+        } catch (error) {
+             console.error("랭킹 추가 실패:", error);
+        }
+        
     };
 
     return(
@@ -33,6 +50,7 @@ export const QuizProvider = ( {children}) => {
             SetanswerCounts,
             rankingList,
             addRanking,
+            setRankingList,
             }}>
         {children}        
         </QuizContext.Provider>
