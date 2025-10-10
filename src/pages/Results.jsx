@@ -7,7 +7,7 @@ import { useRef } from "react";
 function Results(){
     const { nickname } = useParams();
     const navigate = useNavigate();
-    const { result, setResult, qdata, qSetData, answerCounts, SetanswerCounts, addRanking, rankingList, setRankingList } = useQuizContext();     
+    const { result, setResult, qdata, qSetData, answerCounts, SetanswerCounts, åaddRanking, rankingList, setRankingList } = useQuizContext();     
 
     const hasAdded = useRef(false);
 
@@ -18,8 +18,8 @@ function Results(){
         await addRanking(result.nickname, result.score);
         }
     };
-    saveRanking();
-    }, [result, addRanking]);
+    saveRanking(); 
+    }, [result, addRanking]); 
 
     const sortedRanking = [...rankingList].sort((a, b) => b.score - a.score);
     const handleResetQuiz = () => {

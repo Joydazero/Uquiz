@@ -47,11 +47,11 @@ function Quiz(){
 
     return(
         <>
-        <QuizForm contentWith="w-[30rem]" contentHeight="h-[40rem]">
-                    <div >
-                        <h2 className="text-[#000] font-bold text-2xl">UQuiz?</h2>
-                        <h3 className="text-[#000] font-bold text-2xl">{currentIndex + 1}. {currentQuestion.question}</h3>
-                        <ul className="mt-1">
+        <QuizForm contentWith="w-[30rem]" contentHeight="h-[38rem]">
+                    <div className="flex items-center flex-col">
+                        <h2 className="text-[#000] font-bold text-2xl">📝 Uquiz?</h2>
+                        <h3 className="mt-[1rem] text-[#000] font-bold text-md">{currentIndex + 1}. {currentQuestion.question}</h3>
+                        <ul className="mt-2">
                             {
                             currentQuestion.options.map( (option, idx) => (
                                 <li key={idx+1}>
@@ -63,13 +63,13 @@ function Quiz(){
                                     data-index={idx+1}  
                                     className="appearance-auto mr-2"                                  
                                     />
-                                    <label htmlFor={`option_${idx+1}`}>{option}</label>
+                                    <label htmlFor={`option_${idx+1}`} className="text-sm">{option}</label>
                                     </li>
                                 ))
                             }
                         </ul>
-                        <div>`현재 점수`{answerCounts}</div>
-                        <button onClick={handleNextmoveClick} className="mt-3 w-full h-[40px] bg-[#015ce4] text-white rounded-[7px]"> {currentIndex === qdata.length - 1 ? "결과보기" : "다음"}</button>
+                        {/* <div>`현재 점수`{answerCounts}</div> */}
+                        <button onClick={handleNextmoveClick} className="mt-4 w-full h-[40px] bg-[#015ce4] text-white rounded-[7px]"> {currentIndex === qdata.length - 1 ? "결과보기" : "다음"}</button>
                     </div> 
         </QuizForm>
         </>
