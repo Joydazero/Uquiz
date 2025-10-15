@@ -33,20 +33,30 @@ function Results(){
     };
     const handleDelete = async (nickname) => {
         try {
-            // 닉네임으로 먼저 검색
-            const res = await fetch(`${API_BASE}/newRanking?nickname=${nickname}`);
-            const data = await res.json();
+            // ✅ Render 서버로 직접 요청 보내기
+            const searchRes = await fetch(`${API_BASE}/newRanking?nickname=${encodeURIComponent(nickname)}`);
+            if (!searchRes.ok) throw new Error(`검색 실패: ${searchRes.status}`);
+
+            const data = await searchRes.json();
 
             if (data.length > 0) {
-            const targetId = data[0].id; // 닉네임이 유일하다고 가정
-            await fetch(`${API_BASE}/newRanking/${targetId}`, { method: "DELETE" });
+            const targetId = data[0].id;
+
+            // ✅ DELETE도 반드시 API_BASE 사용
+            const deleteRes = await fetch(`${API_BASE}/newRanking/${targetId}`, {
+                method: "DELETE",
+            });
+            if (!deleteRes.ok) throw new Error(`삭제 실패: ${deleteRes.status}`);
 
             setRankingList((prev) => prev.filter((el) => el.nickname !== nickname));
+            } else {
+            console.warn("삭제 대상 없음");
             }
         } catch (err) {
-            console.error(err);
+            console.error("❌ 랭킹 삭제 실패:", err);
         }
-        };
+    };
+
 
     return(
         <>
