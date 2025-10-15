@@ -12,11 +12,18 @@ export const QuizProvider = ( {children}) => {
     const [ answerCounts, SetanswerCounts ] = useState(0);       
     const [rankingList, setRankingList] = useState([]);
 
-    useEffect(()=>{
-         fetch(`${API_BASE}/newRanking`)
-        .then(res => res.json())
-        .then(data => setRankingList(data))
-        .catch(err => console.error("랭킹 불러오기 실패", err));
+    useEffect(() => {
+        const fetchRanking = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/newRanking`);
+            if (!res.ok) throw new Error(`서버 응답 오류: ${res.status}`);
+            const data = await res.json();
+            setRankingList(data);
+        } catch (err) {
+            console.error("🚨 랭킹 불러오기 실패:", err);
+        }
+        };
+        fetchRanking();
     }, []);
 
 
@@ -31,6 +38,7 @@ export const QuizProvider = ( {children}) => {
                 },
                 body: JSON.stringify({ nickname, score }),       
             })
+             if (!res.ok) throw new Error(`서버 응답 오류: ${res.status}`);
             const newRank = await res.json();
             setRankingList((prev) => 
                 [...prev, newRank]

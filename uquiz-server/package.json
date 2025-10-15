@@ -1,0 +1,13 @@
+{
+  "name": "uquiz-json-server",
+  "version": "1.0.0",
+  "description": "Backend for UQuiz using json-server",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "json-server": "^0.17.3"
+  }
+}
