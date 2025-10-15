@@ -4,6 +4,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useRef } from "react";
 
+  const API_BASE = import.meta.env.PROD
+  ? "https://uquiz.onrender.com" // Render에서 배포된 백엔드 URL
+  : "http://localhost:3000";      // 로컬 json-server URL
+
 function Results(){
     const { nickname } = useParams();
     const navigate = useNavigate();
@@ -31,12 +35,12 @@ function Results(){
         try {
             // 닉네임으로 먼저 검색
             //const res = await fetch(`http://localhost:3000/newRanking?nickname=${nickname}`);
-            const res = await fetch(`/api/newRanking?nickname=${nickname}`);
+            const res = await fetch(`${API_BASE}/newRanking?nickname=${nickname}`);
             const data = await res.json();
 
             if (data.length > 0) {
             const targetId = data[0].id; // 닉네임이 유일하다고 가정
-            await fetch(`http://localhost:3000/newRanking/${targetId}`, { method: "DELETE" });
+            await fetch(`${API_BASE}/newRanking/${targetId}`, { method: "DELETE" });
 
             setRankingList((prev) => prev.filter((el) => el.nickname !== nickname));
             }
