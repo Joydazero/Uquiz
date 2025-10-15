@@ -34,7 +34,6 @@ function Results(){
     const handleDelete = async (nickname) => {
         try {
             // 닉네임으로 먼저 검색
-            //const res = await fetch(`http://localhost:3000/newRanking?nickname=${nickname}`);
             const res = await fetch(`${API_BASE}/newRanking?nickname=${nickname}`);
             const data = await res.json();
 
