@@ -7,7 +7,7 @@ import { useRef } from "react";
 function Results(){
     const { nickname } = useParams();
     const navigate = useNavigate();
-    const { result, setResult, qdata, qSetData, answerCounts, SetanswerCounts, åaddRanking, rankingList, setRankingList } = useQuizContext();     
+    const { result, setResult, qdata, qSetData, answerCounts, SetanswerCounts, addRanking, rankingList, setRankingList } = useQuizContext();
 
     const hasAdded = useRef(false);
 
@@ -30,7 +30,8 @@ function Results(){
     const handleDelete = async (nickname) => {
         try {
             // 닉네임으로 먼저 검색
-            const res = await fetch(`http://localhost:3000/newRanking?nickname=${nickname}`);
+            //const res = await fetch(`http://localhost:3000/newRanking?nickname=${nickname}`);
+            const res = await fetch(`/api/newRanking?nickname=${nickname}`);
             const data = await res.json();
 
             if (data.length > 0) {

@@ -10,7 +10,7 @@ export const QuizProvider = ( {children}) => {
     const [rankingList, setRankingList] = useState([]);
 
     useEffect(()=>{
-         fetch('http://localhost:3000/newRanking')
+         fetch('/api/newRanking')
             .then((res)=> res.json())
             .then((data)=> setRankingList(data))
             .catch((err) => console.error("랭킹 불러오기 실패",err));
@@ -20,12 +20,12 @@ export const QuizProvider = ( {children}) => {
          if (rankingList.some(r => r.nickname === nickname)) return;
 
         try {
-            const res = await fetch('http://localhost:3000/newRanking',{
+            const res = await fetch('/api/newRanking',{
                 method : "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ nickname, score }),           
+                body: JSON.stringify({ nickname, score }),       
             })
             const newRank = await res.json();
             setRankingList((prev) => 
