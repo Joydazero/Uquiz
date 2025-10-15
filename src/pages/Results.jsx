@@ -1,12 +1,10 @@
 import QuizForm from "../components/QuizForm";
 import { useQuizContext } from "../components/QuizContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
-  const API_BASE = import.meta.env.PROD
-  ? "https://uquiz.onrender.com" // Render에서 배포된 백엔드 URL
-  : "http://localhost:3000";      // 로컬 json-server URL
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 
 function Results(){
     const { nickname } = useParams();

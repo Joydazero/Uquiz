@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { createContext, useContext } from "react"
 import data from '../data/questions.json'
 export const QuizContext = createContext();
-const API_BASE = import.meta.env.PROD
-  ? "https://uquiz.onrender.com" // ✅ Render 서버 주소 (배포용)
-  : "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export const QuizProvider = ( {children}) => {
     const [ result, setResult ] = useState({ nickname: "" , score : 0,  total: 0}); 
