@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { createContext, useContext } from "react"
 import data from '../data/questions.json'
 export const QuizContext = createContext();
+const API_BASE = import.meta.env.PROD
+  ? "https://uquiz.onrender.com" // ✅ Render 서버 주소 (배포용)
+  : "http://localhost:3000";
 
 export const QuizProvider = ( {children}) => {
     const [ result, setResult ] = useState({ nickname: "" , score : 0,  total: 0}); 
@@ -10,17 +13,18 @@ export const QuizProvider = ( {children}) => {
     const [rankingList, setRankingList] = useState([]);
 
     useEffect(()=>{
-         fetch('/api/newRanking')
-            .then((res)=> res.json())
-            .then((data)=> setRankingList(data))
-            .catch((err) => console.error("랭킹 불러오기 실패",err));
-    },[])
+         fetch(`${API_BASE}/newRanking`)
+        .then(res => res.json())
+        .then(data => setRankingList(data))
+        .catch(err => console.error("랭킹 불러오기 실패", err));
+    }, []);
+
 
     const addRanking = async (nickname, score) => {
          if (rankingList.some(r => r.nickname === nickname)) return;
 
         try {
-            const res = await fetch('/api/newRanking',{
+             const res = await fetch(`${API_BASE}/newRanking`, {
                 method : "POST",
                 headers: {
                     "Content-Type": "application/json",
